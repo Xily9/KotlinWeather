@@ -1,21 +1,11 @@
 package com.xily.kotlinweather.model
 
-import com.xily.kotlinweather.model.bean.AlarmsBean
-import com.xily.kotlinweather.model.bean.CitiesBean
-import com.xily.kotlinweather.model.bean.CityBean
-import com.xily.kotlinweather.model.bean.CityListBean
-import com.xily.kotlinweather.model.bean.CountiesBean
-import com.xily.kotlinweather.model.bean.CountyBean
-import com.xily.kotlinweather.model.bean.ProvinceBean
-import com.xily.kotlinweather.model.bean.ProvincesBean
-import com.xily.kotlinweather.model.bean.SearchBean
-import com.xily.kotlinweather.model.bean.VersionBean
-import com.xily.kotlinweather.model.bean.WeatherBean
+import com.xily.kotlinweather.model.bean.*
 import com.xily.kotlinweather.model.db.DbHelper
 import com.xily.kotlinweather.model.network.HttpHelper
 import com.xily.kotlinweather.model.prefs.PreferencesHelper
+import io.reactivex.Observable
 
-import rx.Observable
 
 class DataManager(private val mPreferenceHelper: PreferencesHelper, private val mHttpHelper: HttpHelper, private val mDbHelper: DbHelper) : HttpHelper, PreferencesHelper, DbHelper {
 

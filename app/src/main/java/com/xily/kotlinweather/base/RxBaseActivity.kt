@@ -2,25 +2,20 @@ package com.xily.kotlinweather.base
 
 import android.os.Bundle
 import android.support.annotation.LayoutRes
-
-import com.trello.rxlifecycle.components.support.RxAppCompatActivity
+import butterknife.ButterKnife
+import butterknife.Unbinder
+import com.trello.rxlifecycle2.components.support.RxAppCompatActivity
+import com.xily.kotlinweather.app.App
 import com.xily.kotlinweather.di.component.ActivityComponent
 import com.xily.kotlinweather.di.component.DaggerActivityComponent
 import com.xily.kotlinweather.di.module.ActivityModule
-import com.xily.kotlinweather.utils.SnackbarUtil
 import com.xily.kotlinweather.utils.ThemeUtil
-
 import javax.inject.Inject
-
-import butterknife.ButterKnife
-import butterknife.Unbinder
-import com.xily.kotlinweather.app.App
 
 abstract class RxBaseActivity<T: IBasePresenter> : RxAppCompatActivity(), IBaseView {
     @Inject
     internal lateinit var mPresenter: T
     private var bind: Unbinder? = null
-
     /**
      * 设置布局layout
      *
@@ -84,4 +79,5 @@ abstract class RxBaseActivity<T: IBasePresenter> : RxAppCompatActivity(), IBaseV
     override fun showErrorMsg(msg: String) {
         SnackbarUtil.showMessage(window.decorView, msg)
     }
+
 }

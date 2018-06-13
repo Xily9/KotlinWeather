@@ -13,14 +13,14 @@ class App : Application() {
         super.onCreate()
         LitePal.initialize(this)
         instance = this
+        appComponent = DaggerAppComponent.builder()
+                .appModule(AppModule(instance))
+                .httpModule(HttpModule())
+                .build()
     }
 
     companion object {
         lateinit var instance: App
-        val appComponent: AppComponent
-            get() = DaggerAppComponent.builder()
-                    .appModule(AppModule(instance))
-                    .httpModule(HttpModule())
-                    .build()
+        lateinit var appComponent: AppComponent
     }
 }

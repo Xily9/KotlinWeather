@@ -1,21 +1,15 @@
 package com.xily.kotlinweather.model.network.api
 
-import com.xily.kotlinweather.model.bean.CitiesBean
-import com.xily.kotlinweather.model.bean.CountiesBean
-import com.xily.kotlinweather.model.bean.ProvincesBean
-import com.xily.kotlinweather.model.bean.SearchBean
-import com.xily.kotlinweather.model.bean.VersionBean
-import com.xily.kotlinweather.model.bean.WeatherBean
-
+import com.xily.kotlinweather.model.bean.*
+import io.reactivex.Observable
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
-import rx.Observable
 
 interface WeatherApi {
 
     @GET(ApiConfig.guoLinApiUrl + "china/")
-    fun getProvinces():Observable<List<ProvincesBean>>
+    fun getProvinces(): Observable<List<ProvincesBean>>
 
     @GET(ApiConfig.myApiUrl + "checkVersion2")
     fun checkVersion(): Observable<VersionBean>

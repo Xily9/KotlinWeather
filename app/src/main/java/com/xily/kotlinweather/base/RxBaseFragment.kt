@@ -6,17 +6,14 @@ import android.support.annotation.LayoutRes
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
-import com.trello.rxlifecycle.components.support.RxFragment
-
-import javax.inject.Inject
-
 import butterknife.ButterKnife
 import butterknife.Unbinder
+import com.trello.rxlifecycle2.components.support.RxFragment
 import com.xily.kotlinweather.app.App
 import com.xily.kotlinweather.di.component.DaggerFragmentComponent
 import com.xily.kotlinweather.di.component.FragmentComponent
 import com.xily.kotlinweather.di.module.FragmentModule
+import javax.inject.Inject
 
 abstract class RxBaseFragment<T : IBasePresenter> : RxFragment(), IBaseView {
     @Inject

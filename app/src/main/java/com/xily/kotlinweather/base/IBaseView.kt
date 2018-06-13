@@ -1,9 +1,8 @@
 package com.xily.kotlinweather.base
 
-import rx.Observable
+import com.trello.rxlifecycle2.LifecycleTransformer
 
 interface IBaseView {
     fun showErrorMsg(msg: String)
-
-    fun <T> bindToLifecycle(): Observable.Transformer<T, T>
+    fun <T> bindToLifecycle(): LifecycleTransformer<T>
 }

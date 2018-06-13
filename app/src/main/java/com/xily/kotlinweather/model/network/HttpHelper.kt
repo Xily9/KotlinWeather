@@ -1,13 +1,8 @@
 package com.xily.kotlinweather.model.network
 
-import com.xily.kotlinweather.model.bean.CitiesBean
-import com.xily.kotlinweather.model.bean.CountiesBean
-import com.xily.kotlinweather.model.bean.ProvincesBean
-import com.xily.kotlinweather.model.bean.SearchBean
-import com.xily.kotlinweather.model.bean.VersionBean
-import com.xily.kotlinweather.model.bean.WeatherBean
+import com.xily.kotlinweather.model.bean.*
+import io.reactivex.Observable
 
-import rx.Observable
 
 interface HttpHelper {
 

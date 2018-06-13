@@ -11,5 +11,4 @@ import dagger.Component
 @Component(dependencies = [(AppComponent::class)], modules = [(FragmentModule::class)])
 interface FragmentComponent {
     val activity: Activity?
-
 }

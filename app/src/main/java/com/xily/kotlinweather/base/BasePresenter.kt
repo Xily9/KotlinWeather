@@ -1,5 +1,7 @@
 package com.xily.kotlinweather.base
 
+import io.reactivex.Observable
+
 abstract class BasePresenter<T : IBaseView> : IBasePresenter {
     protected var mView: T? = null
 
@@ -10,5 +12,9 @@ abstract class BasePresenter<T : IBaseView> : IBasePresenter {
 
     override fun detachView() {
         mView = null
+    }
+
+    fun <T> Observable<T>.bindToLifecycle(): Observable<T> {
+        return compose(mView?.bindToLifecycle()!!)
     }
 }

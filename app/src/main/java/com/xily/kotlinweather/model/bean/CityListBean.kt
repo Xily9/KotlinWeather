@@ -1,8 +1,7 @@
 package com.xily.kotlinweather.model.bean
 
-import org.litepal.crud.DataSupport
 import org.litepal.crud.LitePalSupport
 
-class CityListBean(weatherId: Int,cityName: String,weatherData: String,updateTime: Long,updateTimeStr: String) : LitePalSupport() {
+data class CityListBean(var weatherId: Int, var cityName: String, var weatherData: String, var updateTime: Long, var updateTimeStr: String) : LitePalSupport() {
     val id: Int = 0
 }

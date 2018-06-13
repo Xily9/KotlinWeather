@@ -1,16 +1,11 @@
 package com.xily.kotlinweather.rx
 
-import rx.Observable
-import rx.subjects.PublishSubject
-import rx.subjects.SerializedSubject
-import rx.subjects.Subject
+import io.reactivex.Observable
+import io.reactivex.subjects.PublishSubject
+import io.reactivex.subjects.Subject
 
 class RxBus private constructor() {
-    private val bus: Subject<Any, Any>
-
-    init {
-        bus = SerializedSubject(PublishSubject.create())
-    }
+    private val bus: Subject<Any> = PublishSubject.create<Any>().toSerialized()
 
 
     /**

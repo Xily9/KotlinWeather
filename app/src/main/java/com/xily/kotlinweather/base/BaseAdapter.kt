@@ -6,13 +6,11 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
+import butterknife.ButterKnife
 import java.lang.reflect.Constructor
 import java.lang.reflect.InvocationTargetException
 import java.lang.reflect.Modifier
 import java.lang.reflect.ParameterizedType
-
-import butterknife.ButterKnife
 
 /**
  * RecycleView通用基类
@@ -23,20 +21,20 @@ import butterknife.ButterKnife
  * @author Xily
  */
 
-abstract class BaseAdapter<T : BaseAdapter<T,U>.BaseViewHolder, U>(var list: List<U>?) : RecyclerView.Adapter<T>() {
+abstract class BaseAdapter<T : BaseAdapter.BaseViewHolder, U>(var list: List<U>?) : RecyclerView.Adapter<T>() {
     var context: Context? = null
         private set
-    private var onItemClickListener: OnItemClickListener? = null
-    private var onItemLongClickListener: OnItemLongClickListener? = null
+    private var onItemClickListener: ((position: Int) -> Unit?)? = null
+    private var onItemLongClickListener: ((position: Int) -> Boolean?)? = null
 
     @get:LayoutRes
     protected abstract val layoutId: Int
 
-    fun setOnItemClickListener(onItemClickListener: OnItemClickListener) {
+    fun setOnItemClickListener(onItemClickListener: (position: Int) -> Unit) {
         this.onItemClickListener = onItemClickListener
     }
 
-    fun setOnItemLongClickListener(onItemLongClickListener: OnItemLongClickListener) {
+    fun setOnItemLongClickListener(onItemLongClickListener: (position: Int) -> Boolean) {
         this.onItemLongClickListener = onItemLongClickListener
     }
 
@@ -47,16 +45,18 @@ abstract class BaseAdapter<T : BaseAdapter<T,U>.BaseViewHolder, U>(var list: Lis
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): T {
         context = parent.context
         val holder = createViewHolder(LayoutInflater.from(context).inflate(layoutId, parent, false))
-        if (onItemClickListener != null)
+        onItemClickListener?.let {
             holder.itemView.setOnClickListener({
                 val position = holder.adapterPosition
-                onItemClickListener!!.onItemClick(position)
+                onItemClickListener?.invoke(position)
             })
-        if (onItemLongClickListener != null)
+        }
+        onItemLongClickListener?.let {
             holder.itemView.setOnLongClickListener({
                 val position = holder.adapterPosition
-                onItemLongClickListener!!.onItemLongClick(position)
+                onItemLongClickListener?.invoke(position)!!
             })
+        }
         return holder
     }
 
@@ -100,18 +100,10 @@ abstract class BaseAdapter<T : BaseAdapter<T,U>.BaseViewHolder, U>(var list: Lis
 
     protected abstract fun onBindViewHolder(holder: T, position: Int, value: U)
 
-    inner class BaseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    open class BaseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         init {
             ButterKnife.bind(this, itemView)
         }
-    }
-
-    interface OnItemClickListener {
-        fun onItemClick(position: Int)
-    }
-
-    interface OnItemLongClickListener {
-        fun onItemLongClick(position: Int): Boolean
     }
 }
