@@ -10,7 +10,6 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-
     <application
         android:name=".app.App"
         android:allowBackup="true"
@@ -21,10 +20,10 @@
         android:theme="@style/AppThemeBlue">
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="c5bf7302d73fa7139befaaa9b16d8544" />
+            android:value="eda326a1650aaee59dd0ac40f57701cc" />
         <provider
             android:name="android.support.v4.content.FileProvider"
-            android:authorities="com.xily.weather.fileProvider"
+            android:authorities="com.xily.kotlinweather.fileProvider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
@@ -41,7 +40,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".ui.activity.CityActivity" />
+        <activity android:name=".ui.activity.AddCityActivity" />
+        <activity android:name=".ui.activity.AboutActivity" />
+        <activity android:name=".ui.activity.AlarmActivity" />
+        <activity android:name=".ui.activity.SettingsActivity" />
 
+        <service
+            android:name=".service.WeatherService"
+            android:enabled="true"
+            android:exported="false" />
         <receiver android:name=".widget.WeatherWidget">
             <meta-data
                 android:name="android.appwidget.provider"

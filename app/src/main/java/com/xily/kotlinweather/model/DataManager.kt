@@ -11,8 +11,8 @@ class DataManager(private val mPreferenceHelper: PreferencesHelper, private val 
 
     override var checkedVersion: Int
         get() = mPreferenceHelper.checkedVersion
-        set(checkVersion) {
-            mPreferenceHelper.setCheckVersion(checkVersion)
+        set(checkedVersion) {
+            mPreferenceHelper.checkedVersion = checkedVersion
         }
 
     override var checkUpdate: Boolean
@@ -115,11 +115,7 @@ class DataManager(private val mPreferenceHelper: PreferencesHelper, private val 
         return mHttpHelper.getProvinces()
     }
 
-    override fun setCheckVersion(checkVersion: Int) {
-        mPreferenceHelper.setCheckVersion(checkVersion)
-    }
-
-    override fun getCityById(id: Int): CityListBean {
+    override fun getCityById(id: Int): CityListBean? {
         return mDbHelper.getCityById(id)
     }
 

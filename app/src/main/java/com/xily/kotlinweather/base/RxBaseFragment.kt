@@ -77,9 +77,7 @@ abstract class RxBaseFragment<T : IBasePresenter> : RxFragment(), IBaseView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         initInject()
-        if (mPresenter != null) {
-            mPresenter!!.attachView(this)
-        }
+        mPresenter.attachView(this)
         super.onViewCreated(view, savedInstanceState)
         bind = ButterKnife.bind(this, view)
         finishCreateView(savedInstanceState)

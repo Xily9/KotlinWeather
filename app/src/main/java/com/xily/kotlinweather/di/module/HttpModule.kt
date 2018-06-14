@@ -36,6 +36,6 @@ class HttpModule {
     @Provides
     @Singleton
     internal fun provideWeatherApi(retrofit: Retrofit): WeatherApi {
-        return retrofit.create(WeatherApi::class.java!!)
+        return retrofit.create(WeatherApi::class.java)
     }
 }

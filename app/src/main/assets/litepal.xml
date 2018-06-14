@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<litepal>
+
+    <dbname value="weather" />
+
+    <version value="1" />
+
+    <list>
+        <mapping class="com.xily.kotlinweather.model.bean.CityBean" />
+        <mapping class="com.xily.kotlinweather.model.bean.CountyBean" />
+        <mapping class="com.xily.kotlinweather.model.bean.ProvinceBean" />
+        <mapping class="com.xily.kotlinweather.model.bean.CityListBean" />
+        <mapping class="com.xily.kotlinweather.model.bean.AlarmsBean" />
+    </list>
+
+</litepal>

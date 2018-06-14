@@ -10,6 +10,7 @@ import com.xily.kotlinweather.di.component.ActivityComponent
 import com.xily.kotlinweather.di.component.DaggerActivityComponent
 import com.xily.kotlinweather.di.module.ActivityModule
 import com.xily.kotlinweather.utils.ThemeUtil
+import com.xily.kotlinweather.utils.showMessage
 import javax.inject.Inject
 
 abstract class RxBaseActivity<T: IBasePresenter> : RxAppCompatActivity(), IBaseView {
@@ -77,7 +78,7 @@ abstract class RxBaseActivity<T: IBasePresenter> : RxAppCompatActivity(), IBaseV
     abstract fun initInject()
 
     override fun showErrorMsg(msg: String) {
-        SnackbarUtil.showMessage(window.decorView, msg)
+        showMessage(window.decorView, msg)
     }
 
 }

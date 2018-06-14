@@ -46,7 +46,7 @@ interface MainContract {
 
         fun getBingPic(day: String)
 
-        fun setCheckVersion(checkVersion: Int)
+        fun setCheckedVersion(checkVersion: Int)
 
         fun loadBingPic(url: String)
 

@@ -2,7 +2,7 @@ package com.xily.kotlinweather.model.bean
 
 class SearchBean {
 
-    var heWeather6: List<HeWeather6Bean>? = null
+    var HeWeather6: List<HeWeather6Bean>? = null
 
     class HeWeather6Bean {
         /**

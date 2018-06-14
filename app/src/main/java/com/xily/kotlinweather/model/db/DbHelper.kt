@@ -1,17 +1,13 @@
 package com.xily.kotlinweather.model.db
 
-import com.xily.kotlinweather.model.bean.AlarmsBean
-import com.xily.kotlinweather.model.bean.CityBean
-import com.xily.kotlinweather.model.bean.CityListBean
-import com.xily.kotlinweather.model.bean.CountyBean
-import com.xily.kotlinweather.model.bean.ProvinceBean
+import com.xily.kotlinweather.model.bean.*
 
 interface DbHelper {
     val cityList: List<CityListBean>
 
     val province: List<ProvinceBean>
 
-    fun getCityById(id: Int): CityListBean
+    fun getCityById(id: Int): CityListBean?
 
     fun getCityByWeatherId(id: Int): List<CityListBean>
 

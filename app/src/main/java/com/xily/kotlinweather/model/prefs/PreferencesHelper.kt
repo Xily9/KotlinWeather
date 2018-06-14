@@ -1,7 +1,7 @@
 package com.xily.kotlinweather.model.prefs
 
 interface PreferencesHelper {
-    val checkedVersion: Int
+    var checkedVersion: Int
 
     var checkUpdate: Boolean
 
@@ -33,5 +33,4 @@ interface PreferencesHelper {
 
     var rainNotificationTime: String
 
-    fun setCheckVersion(checkVersion: Int)
 }

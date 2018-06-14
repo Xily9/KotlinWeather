@@ -3,18 +3,16 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
-kapt {
-    generateStubs = true
-}
 android {
     compileSdkVersion 27
     defaultConfig {
         applicationId "com.xily.kotlinweather"
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 1
-        versionName "1.0"
+        versionCode 5
+        versionName "V 1.1.0.20180614"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        resConfigs "zh-rCN"
     }
     buildTypes {
         release {
@@ -26,11 +24,11 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation"org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     implementation 'com.android.support:appcompat-v7:27.0.2'
     implementation 'com.squareup.retrofit2:retrofit:2.3.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
-    implementation "io.reactivex.rxjava2:rxjava:2.1.14"
+    implementation 'io.reactivex.rxjava2:rxjava:2.1.14'
     implementation 'io.reactivex.rxjava2:rxkotlin:2.2.0'
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'

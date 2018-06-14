@@ -68,19 +68,25 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:text="io.reactivex:rxandroid" />
+                android:text="io.reactivex.rxjava2:rxandroid" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:text="io.reactivex:rxjava" />
+                android:text="io.reactivex.rxjava2:rxkotlin" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:text="com.trello:rxlifecycle" />
+                android:text="io.reactivex.rxjava2:rxjava" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="com.trello.rxlifecycle2" />
 
             <TextView
                 android:layout_width="wrap_content"

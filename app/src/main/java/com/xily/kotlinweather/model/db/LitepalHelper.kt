@@ -1,12 +1,7 @@
 package com.xily.kotlinweather.model.db
 
-import com.xily.kotlinweather.model.bean.AlarmsBean
-import com.xily.kotlinweather.model.bean.CityBean
-import com.xily.kotlinweather.model.bean.CityListBean
-import com.xily.kotlinweather.model.bean.CountyBean
-import com.xily.kotlinweather.model.bean.ProvinceBean
+import com.xily.kotlinweather.model.bean.*
 import org.litepal.LitePal
-
 import javax.inject.Inject
 
 class LitepalHelper @Inject
@@ -18,7 +13,7 @@ constructor() : DbHelper {
     override val province: List<ProvinceBean>
         get() = LitePal.findAll(ProvinceBean::class.java)
 
-    override fun getCityById(id: Int): CityListBean {
+    override fun getCityById(id: Int): CityListBean? {
         return LitePal.find(CityListBean::class.java, id.toLong())
     }
 

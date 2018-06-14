@@ -7,8 +7,11 @@ import javax.inject.Inject
 class ImplPreferencesHelper @Inject
 constructor(private val mPreference: PreferenceUtil) : PreferencesHelper {
 
-    override val checkedVersion: Int
+    override var checkedVersion: Int
         get() = mPreference["checkedVersion", 0]
+        set(checkedVersion) {
+            mPreference.put("checkedVersion", checkedVersion)
+        }
 
     override var checkUpdate: Boolean
         get() = mPreference["checkUpdate", true]
@@ -100,7 +103,4 @@ constructor(private val mPreference: PreferenceUtil) : PreferencesHelper {
             mPreference.put("rainNotificationTime", time)
         }
 
-    override fun setCheckVersion(checkVersion: Int) {
-        mPreference.put("checkVersion", checkVersion)
-    }
 }
