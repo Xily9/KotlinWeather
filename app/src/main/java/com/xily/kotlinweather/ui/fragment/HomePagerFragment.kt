@@ -15,7 +15,7 @@ import com.xily.kotlinweather.BuildConfig
 import com.xily.kotlinweather.R
 import com.xily.kotlinweather.base.RxBaseFragment
 import com.xily.kotlinweather.contract.PagerContract
-import com.xily.kotlinweather.model.bean.WeatherBean
+import com.xily.kotlinweather.model.network.bean.WeatherBean
 import com.xily.kotlinweather.presenter.PagerPresenter
 import com.xily.kotlinweather.ui.activity.AlarmActivity
 import com.xily.kotlinweather.ui.adapter.ForecastAdapter
@@ -60,8 +60,8 @@ class HomePagerFragment : RxBaseFragment<PagerPresenter>(), PagerContract.View {
     internal lateinit var suggest: RecyclerView
     @BindView(R.id.layout_swipe_refresh)
     internal lateinit var swipeRefreshLayout: SwipeRefreshLayout
-    private var title: TextView? = null
-    private var updateTime: TextView? = null
+    private lateinit var title: TextView
+    private lateinit var updateTime: TextView
     private var mIsVisible: Boolean = false
     private var isViewCreated: Boolean = false
 
@@ -71,13 +71,15 @@ class HomePagerFragment : RxBaseFragment<PagerPresenter>(), PagerContract.View {
     override fun finishCreateView(state: Bundle?) {
         initToolbar()
         val bundle = arguments
-        val position = bundle!!.getInt("position")
-        mPresenter.getCityInfo(position)
-        swipeRefreshLayout.setColorSchemeColors(activity!!.getAttrColor(R.attr.colorAccent))
-        swipeRefreshLayout.setOnRefreshListener { mPresenter.getWeather(true) }
-        isViewCreated = true
-        onVisible()
-        mPresenter.getWeather(false)
+        bundle?.let {
+            val position = it.getInt("position")
+            mPresenter.getCityInfo(position)
+            swipeRefreshLayout.setColorSchemeColors(activity!!.getAttrColor(R.attr.colorAccent))
+            swipeRefreshLayout.setOnRefreshListener { mPresenter.getWeather(true) }
+            isViewCreated = true
+            onVisible()
+            mPresenter.getWeather(false)
+        }
     }
 
     override fun initToolbar() {
@@ -133,7 +135,7 @@ class HomePagerFragment : RxBaseFragment<PagerPresenter>(), PagerContract.View {
             alarm.text = stringBuilder.toString()
             alarm.setOnClickListener {
                 val intent = Intent(activity, AlarmActivity::class.java)
-                intent.putExtra("alarmId", mPresenter!!.cityId)
+                intent.putExtra("alarmId", mPresenter.cityId)
                 startActivity(intent)
             }
         }
@@ -160,18 +162,18 @@ class HomePagerFragment : RxBaseFragment<PagerPresenter>(), PagerContract.View {
     }
 
     override fun setUpdateTime(updateTime: String) {
-        this.updateTime!!.text = updateTime
+        this.updateTime.text = updateTime
     }
 
     override fun setTitle(title: String) {
-        this.title!!.text = title
+        this.title.text = title
     }
 
     override fun sendBroadcast() {
         val intent = Intent(BuildConfig.APPLICATION_ID + ".LOCAL_BROADCAST")
-        LocalBroadcastManager.getInstance(applicationContext!!).sendBroadcast(intent)
+        LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
         val intent2 = Intent("android.appwidget.action.APPWIDGET_UPDATE")
-        applicationContext!!.sendBroadcast(intent2)
+        applicationContext.sendBroadcast(intent2)
     }
 
     override fun showErrorMsg(msg: String) {

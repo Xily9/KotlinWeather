@@ -7,7 +7,7 @@ import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.View
 import com.xily.kotlinweather.R
-import com.xily.kotlinweather.model.bean.WeatherBean
+import com.xily.kotlinweather.model.network.bean.WeatherBean
 import com.xily.kotlinweather.utils.WeatherUtil
 import com.xily.kotlinweather.utils.debug
 import java.util.*

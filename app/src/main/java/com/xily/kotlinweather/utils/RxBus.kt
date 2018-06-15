@@ -1,4 +1,4 @@
-package com.xily.kotlinweather.rx
+package com.xily.kotlinweather.utils
 
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject

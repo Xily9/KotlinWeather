@@ -39,7 +39,7 @@ abstract class BaseAdapter<T : BaseAdapter.BaseViewHolder, U>(var list: List<U>?
     }
 
     override fun getItemCount(): Int {
-        return list!!.size
+        return list?.size ?: 0
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): T {
@@ -54,7 +54,7 @@ abstract class BaseAdapter<T : BaseAdapter.BaseViewHolder, U>(var list: List<U>?
         onItemLongClickListener?.let {
             holder.itemView.setOnLongClickListener({
                 val position = holder.adapterPosition
-                onItemLongClickListener?.invoke(position)!!
+                onItemLongClickListener?.invoke(position) ?: false
             })
         }
         return holder

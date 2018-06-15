@@ -3,7 +3,7 @@ package com.xily.kotlinweather.base
 import io.reactivex.Observable
 
 abstract class BasePresenter<T : IBaseView> : IBasePresenter {
-    protected var mView: T? = null
+    protected lateinit var mView: T
 
     override fun attachView(view: IBaseView) {
         @Suppress("UNCHECKED_CAST")
@@ -11,10 +11,10 @@ abstract class BasePresenter<T : IBaseView> : IBasePresenter {
     }
 
     override fun detachView() {
-        mView = null
+
     }
 
     fun <T> Observable<T>.bindToLifecycle(): Observable<T> {
-        return compose(mView?.bindToLifecycle()!!)
+        return compose(mView.bindToLifecycle())
     }
 }

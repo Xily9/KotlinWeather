@@ -30,10 +30,10 @@ import com.xily.kotlinweather.R
 import com.xily.kotlinweather.base.RxBaseActivity
 import com.xily.kotlinweather.contract.SettingsContract
 import com.xily.kotlinweather.model.bean.BusBean
-import com.xily.kotlinweather.model.bean.CityListBean
+import com.xily.kotlinweather.model.db.bean.CityListBean
 import com.xily.kotlinweather.presenter.SettingsPresenter
-import com.xily.kotlinweather.rx.RxBus
 import com.xily.kotlinweather.service.WeatherService
+import com.xily.kotlinweather.utils.RxBus
 import com.xily.kotlinweather.utils.isServiceRunning
 import com.xily.kotlinweather.utils.toast
 

@@ -2,7 +2,7 @@ package com.xily.kotlinweather.contract
 
 import com.xily.kotlinweather.base.IBasePresenter
 import com.xily.kotlinweather.base.IBaseView
-import com.xily.kotlinweather.model.bean.CityListBean
+import com.xily.kotlinweather.model.db.bean.CityListBean
 
 interface SettingsContract {
     interface View : IBaseView

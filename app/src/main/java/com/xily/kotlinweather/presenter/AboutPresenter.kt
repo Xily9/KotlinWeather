@@ -5,5 +5,4 @@ import com.xily.kotlinweather.contract.AboutContract
 import javax.inject.Inject
 
 class AboutPresenter @Inject
-constructor() : BasePresenter<AboutContract.View>(), AboutContract.Presenter {
-}
+constructor() : BasePresenter<AboutContract.View>(), AboutContract.Presenter

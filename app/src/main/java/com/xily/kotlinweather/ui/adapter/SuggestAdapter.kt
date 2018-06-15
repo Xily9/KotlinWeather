@@ -5,7 +5,7 @@ import android.widget.TextView
 import butterknife.BindView
 import com.xily.kotlinweather.R
 import com.xily.kotlinweather.base.BaseAdapter
-import com.xily.kotlinweather.model.bean.WeatherBean
+import com.xily.kotlinweather.model.network.bean.WeatherBean
 
 class SuggestAdapter(mList: List<WeatherBean.ValueBean.IndexesBean>?) : BaseAdapter<SuggestAdapter.ViewHolder, WeatherBean.ValueBean.IndexesBean>(mList) {
 

@@ -1,6 +1,6 @@
 package com.xily.kotlinweather.model.network
 
-import com.xily.kotlinweather.model.bean.*
+import com.xily.kotlinweather.model.network.bean.*
 import io.reactivex.Observable
 
 

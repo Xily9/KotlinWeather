@@ -1,4 +1,4 @@
-package com.xily.kotlinweather.model.bean
+package com.xily.kotlinweather.model.db.bean
 
 import org.litepal.crud.LitePalSupport
 

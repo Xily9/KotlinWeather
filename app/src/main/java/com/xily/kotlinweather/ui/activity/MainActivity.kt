@@ -2,7 +2,6 @@ package com.xily.kotlinweather.ui.activity
 
 import android.Manifest
 import android.app.ProgressDialog
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
 import android.graphics.Color
@@ -34,10 +33,9 @@ import com.xily.kotlinweather.R
 import com.xily.kotlinweather.base.RxBaseActivity
 import com.xily.kotlinweather.contract.MainContract
 import com.xily.kotlinweather.model.bean.BusBean
-import com.xily.kotlinweather.model.bean.CityListBean
-import com.xily.kotlinweather.model.bean.VersionBean
+import com.xily.kotlinweather.model.db.bean.CityListBean
+import com.xily.kotlinweather.model.network.bean.VersionBean
 import com.xily.kotlinweather.presenter.MainPresenter
-import com.xily.kotlinweather.rx.RxBus
 import com.xily.kotlinweather.service.WeatherService
 import com.xily.kotlinweather.ui.adapter.HomePagerAdapter
 import com.xily.kotlinweather.utils.*
@@ -149,7 +147,7 @@ class MainActivity : RxBaseActivity<MainPresenter>(), NavigationView.OnNavigatio
     private fun initRxBus() {
         RxBus.instance
                 .toObservable(BusBean::class.java)
-                .compose(bindToLifecycle<BusBean>())
+                .compose(bindToLifecycle())
                 .applySchedulers()
                 .subscribe({ busBean ->
                     if (busBean.status == 1)
@@ -161,8 +159,7 @@ class MainActivity : RxBaseActivity<MainPresenter>(), NavigationView.OnNavigatio
 
     private fun startService() {
         if (!isServiceRunning(BuildConfig.APPLICATION_ID + ".service.WeatherService")) {
-            val startIntent = Intent(this, WeatherService::class.java)
-            startService(startIntent)
+            startService<WeatherService>()
         }
     }
 
@@ -198,7 +195,7 @@ class MainActivity : RxBaseActivity<MainPresenter>(), NavigationView.OnNavigatio
 
     override fun initCities() {
         cityList = mPresenter.cityList
-        if (!cityList!!.isEmpty()) {
+        if (cityList?.isEmpty() == false) {
             initViewPager()
             setPos(0)
             activeTimer()
@@ -235,10 +232,10 @@ class MainActivity : RxBaseActivity<MainPresenter>(), NavigationView.OnNavigatio
                 .applySchedulers()
                 .subscribe {
                     when (item.itemId) {
-                        R.id.city -> startActivity(Intent(this, CityActivity::class.java))
-                        R.id.nav_setting -> startActivity(Intent(this, SettingsActivity::class.java))
+                        R.id.city -> startActivity<CityActivity>()
+                        R.id.nav_setting -> startActivity<SettingsActivity>()
                         R.id.nav_theme -> ThemeUtil.showSwitchThemeDialog(this)
-                        R.id.nav_about -> startActivity(Intent(this, AboutActivity::class.java))
+                        R.id.nav_about -> startActivity<AboutActivity>()
                     }
                 }
         return true

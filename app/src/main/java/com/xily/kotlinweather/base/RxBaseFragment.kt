@@ -18,19 +18,13 @@ import javax.inject.Inject
 abstract class RxBaseFragment<T : IBasePresenter> : RxFragment(), IBaseView {
     @Inject
     internal lateinit var mPresenter: T
-    private var bind: Unbinder? = null
+    private lateinit var bind: Unbinder
 
     @get:LayoutRes
     abstract val layoutId: Int
 
-    val applicationContext: Context?
-        get() = if (this.activity == null)
-            if (activity == null)
-                null
-            else
-                activity!!.applicationContext
-        else
-            this.activity!!.applicationContext
+    val applicationContext: Context
+        get() = activity?.applicationContext ?: App.instance.applicationContext
 
     protected val fragmentComponent: FragmentComponent
         get() = DaggerFragmentComponent.builder()
@@ -51,7 +45,7 @@ abstract class RxBaseFragment<T : IBasePresenter> : RxFragment(), IBaseView {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        bind!!.unbind()
+        bind.unbind()
     }
 
     /**

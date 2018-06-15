@@ -3,10 +3,10 @@ package com.xily.kotlinweather.presenter
 import com.xily.kotlinweather.base.BasePresenter
 import com.xily.kotlinweather.contract.AddCityContract
 import com.xily.kotlinweather.model.DataManager
-import com.xily.kotlinweather.model.bean.CityBean
-import com.xily.kotlinweather.model.bean.CityListBean
-import com.xily.kotlinweather.model.bean.CountyBean
-import com.xily.kotlinweather.model.bean.ProvinceBean
+import com.xily.kotlinweather.model.db.bean.CityBean
+import com.xily.kotlinweather.model.db.bean.CityListBean
+import com.xily.kotlinweather.model.db.bean.CountyBean
+import com.xily.kotlinweather.model.db.bean.ProvinceBean
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import java.util.*
@@ -24,11 +24,11 @@ constructor(private val mDataManager: DataManager) : BasePresenter<AddCityContra
         val dataList = ArrayList<String>()
         val codeList = ArrayList<Int>()
         mDataManager.search(str)
-                .compose(mView!!.bindToLifecycle())
+                .compose(mView.bindToLifecycle())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe { mView!!.showProgressDialog() }
-                .doFinally { mView!!.closeProgressDialog() }
+                .doOnSubscribe { mView.showProgressDialog() }
+                .doFinally { mView.closeProgressDialog() }
                 .subscribe({ searchBean ->
                     val heWeather6Bean = searchBean.HeWeather6!![0]
                     if (heWeather6Bean.status == "ok") {
@@ -38,11 +38,11 @@ constructor(private val mDataManager: DataManager) : BasePresenter<AddCityContra
                             dataList.add(basicBean.location!!)
                             codeList.add(Integer.valueOf(basicBean.cid!!.substring(2)))
                         }
-                        mView!!.show(dataList, codeList)
+                        mView.show(dataList, codeList)
                     }
                 }) { throwable ->
                     throwable.printStackTrace()
-                    mView!!.showErrorMsg(throwable.message!!)
+                    mView.showErrorMsg(throwable.message!!)
                 }
     }
 
@@ -52,11 +52,11 @@ constructor(private val mDataManager: DataManager) : BasePresenter<AddCityContra
         val provinceList = mDataManager.province
         if (provinceList.isEmpty()) {
             mDataManager.getProvinces()
-                    .compose(mView!!.bindToLifecycle())
+                    .compose(mView.bindToLifecycle())
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .doOnSubscribe { mView!!.showProgressDialog() }
-                    .doFinally { mView!!.closeProgressDialog() }
+                    .doOnSubscribe { mView.showProgressDialog() }
+                    .doFinally { mView.closeProgressDialog() }
                     .subscribe({ provincesInfoList ->
                         for (provincesBean in provincesInfoList) {
                             val province = ProvinceBean(provinceCode = provincesBean.id, provinceName = provincesBean.name!!)
@@ -64,17 +64,17 @@ constructor(private val mDataManager: DataManager) : BasePresenter<AddCityContra
                             dataList.add(provincesBean.name!!)
                             codeList.add(provincesBean.id)
                         }
-                        mView!!.show(dataList, codeList)
+                        mView.show(dataList, codeList)
                     }) { throwable ->
                         throwable.printStackTrace()
-                        mView!!.showErrorMsg(throwable.message!!)
+                        mView.showErrorMsg(throwable.message!!)
                     }
         } else {
             for (province in provinceList) {
                 dataList.add(province.provinceName)
                 codeList.add(province.provinceCode)
             }
-            mView!!.show(dataList, codeList)
+            mView.show(dataList, codeList)
         }
     }
 
@@ -85,11 +85,11 @@ constructor(private val mDataManager: DataManager) : BasePresenter<AddCityContra
         val cityList = mDataManager.getCity(provinceIdStr)
         if (cityList.isEmpty()) {
             mDataManager.getCities(provinceIdStr)
-                    .compose(mView!!.bindToLifecycle())
+                    .compose(mView.bindToLifecycle())
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .doOnSubscribe { mView!!.showProgressDialog() }
-                    .doFinally { mView!!.closeProgressDialog() }
+                    .doOnSubscribe { mView.showProgressDialog() }
+                    .doFinally { mView.closeProgressDialog() }
                     .subscribe({ citiesInfoList ->
                         for (citiesBean in citiesInfoList) {
                             val city = CityBean(cityCode = citiesBean.id, cityName = citiesBean.name!!, provinceId = provinceId)
@@ -97,17 +97,17 @@ constructor(private val mDataManager: DataManager) : BasePresenter<AddCityContra
                             dataList.add(citiesBean.name!!)
                             codeList.add(citiesBean.id)
                         }
-                        mView!!.show(dataList, codeList)
+                        mView.show(dataList, codeList)
                     }) { throwable ->
                         throwable.printStackTrace()
-                        mView!!.showErrorMsg(throwable.message!!)
+                        mView.showErrorMsg(throwable.message!!)
                     }
         } else {
             for (city in cityList) {
                 dataList.add(city.cityName)
                 codeList.add(city.cityCode)
             }
-            mView!!.show(dataList, codeList)
+            mView.show(dataList, codeList)
         }
     }
 
@@ -118,11 +118,11 @@ constructor(private val mDataManager: DataManager) : BasePresenter<AddCityContra
         val countyList = mDataManager.getCounty(cityIdStr)
         if (countyList.isEmpty()) {
             mDataManager.getCounties(provinceId.toString(), cityIdStr)
-                    .compose(mView!!.bindToLifecycle())
+                    .compose(mView.bindToLifecycle())
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .doOnSubscribe { mView!!.showProgressDialog() }
-                    .doFinally { mView!!.closeProgressDialog() }
+                    .doOnSubscribe { mView.showProgressDialog() }
+                    .doFinally { mView.closeProgressDialog() }
                     .subscribe({ countiesInfoList ->
                         for (countiesBean in countiesInfoList) {
                             val id = Integer.valueOf(countiesBean.weather_id!!.substring(2))
@@ -134,17 +134,17 @@ constructor(private val mDataManager: DataManager) : BasePresenter<AddCityContra
                             dataList.add(countiesBean.name!!)
                             codeList.add(id)
                         }
-                        mView!!.show(dataList, codeList)
+                        mView.show(dataList, codeList)
                     }) { throwable ->
                         throwable.printStackTrace()
-                        mView!!.showErrorMsg(throwable.message!!)
+                        mView.showErrorMsg(throwable.message!!)
                     }
         } else {
             for (county in countyList) {
                 dataList.add(county.countyName)
                 codeList.add(county.weatherId)
             }
-            mView!!.show(dataList, codeList)
+            mView.show(dataList, codeList)
         }
     }
 

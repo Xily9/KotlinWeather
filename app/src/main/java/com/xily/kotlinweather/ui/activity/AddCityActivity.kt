@@ -15,7 +15,7 @@ import com.xily.kotlinweather.base.RxBaseActivity
 import com.xily.kotlinweather.contract.AddCityContract
 import com.xily.kotlinweather.model.bean.BusBean
 import com.xily.kotlinweather.presenter.AddCityPresenter
-import com.xily.kotlinweather.rx.RxBus
+import com.xily.kotlinweather.utils.RxBus
 import com.xily.kotlinweather.utils.hideSoftInput
 import com.xily.kotlinweather.utils.showMessage
 import com.xily.kotlinweather.utils.toast
@@ -28,7 +28,7 @@ class AddCityActivity : RxBaseActivity<AddCityPresenter>(), AddCityContract.View
     internal lateinit var mToolbar: Toolbar
     @BindView(R.id.toolbar_title)
     internal lateinit var title: TextView
-    private var adapter: ArrayAdapter<String>? = null
+    private lateinit var adapter: ArrayAdapter<String>
     private val mDataList = ArrayList<String>()
     private val mCodeList = ArrayList<Int>()
     private var level = 0
@@ -86,13 +86,13 @@ class AddCityActivity : RxBaseActivity<AddCityPresenter>(), AddCityContract.View
         setSupportActionBar(mToolbar)
         setTitle("")
         val actionBar = supportActionBar
-        if (actionBar != null) {
-            actionBar.setHomeButtonEnabled(true)
-            actionBar.setDisplayHomeAsUpEnabled(true)
+        actionBar?.apply {
+            setHomeButtonEnabled(true)
+            setDisplayHomeAsUpEnabled(true)
         }
     }
 
-    override fun loadData() {
+    fun loadData() {
         when (level) {
             0 -> {
                 title.text = "中国"
@@ -149,21 +149,19 @@ class AddCityActivity : RxBaseActivity<AddCityPresenter>(), AddCityContract.View
      * 显示进度对话框
      */
     override fun showProgressDialog() {
-        if (progressDialog == null) {
+        progressDialog ?: let {
             progressDialog = ProgressDialog(this)
-            progressDialog!!.setMessage("正在加载...")
-            progressDialog!!.setCanceledOnTouchOutside(false)
+            progressDialog?.setMessage("正在加载...")
+            progressDialog?.setCanceledOnTouchOutside(false)
         }
-        progressDialog!!.show()
+        progressDialog?.show()
     }
 
     /**
      * 关闭进度对话框
      */
     override fun closeProgressDialog() {
-        if (progressDialog != null) {
-            progressDialog!!.dismiss()
-        }
+        progressDialog?.dismiss()
     }
 
     override fun show(dataList: List<String>, codeList: List<Int>) {
@@ -172,7 +170,7 @@ class AddCityActivity : RxBaseActivity<AddCityPresenter>(), AddCityContract.View
         mDataList.addAll(dataList)
         mCodeList.clear()
         mCodeList.addAll(codeList)
-        adapter!!.notifyDataSetChanged()
+        adapter.notifyDataSetChanged()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

@@ -7,8 +7,8 @@ import butterknife.BindView
 import com.google.gson.Gson
 import com.xily.kotlinweather.R
 import com.xily.kotlinweather.base.BaseAdapter
-import com.xily.kotlinweather.model.bean.CityListBean
-import com.xily.kotlinweather.model.bean.WeatherBean
+import com.xily.kotlinweather.model.db.bean.CityListBean
+import com.xily.kotlinweather.model.network.bean.WeatherBean
 
 class CityAdapter(mList: List<CityListBean>) : BaseAdapter<CityAdapter.ViewHolder, CityListBean>(mList) {
 

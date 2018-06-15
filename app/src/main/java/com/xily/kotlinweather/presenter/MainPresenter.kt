@@ -15,7 +15,7 @@ import com.xily.kotlinweather.app.App
 import com.xily.kotlinweather.base.BasePresenter
 import com.xily.kotlinweather.contract.MainContract
 import com.xily.kotlinweather.model.DataManager
-import com.xily.kotlinweather.model.bean.CityListBean
+import com.xily.kotlinweather.model.db.bean.CityListBean
 import com.xily.kotlinweather.model.network.OkHttpHelper
 import com.xily.kotlinweather.utils.applySchedulers
 import com.xily.kotlinweather.utils.cacheDir
@@ -26,7 +26,8 @@ import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import okhttp3.*
+import okhttp3.OkHttpClient
+import okhttp3.Request
 import java.io.*
 import javax.inject.Inject
 
@@ -69,14 +70,14 @@ constructor(private var mContext: App, private val mDataManager: DataManager, pr
                     if (it.status == 0) {
                         val dataBean = it.data
                         if (version < dataBean!!.version && dataBean.version > checkedVersion) {
-                            mView!!.showUpdateDialog(versionName, version, dataBean)
+                            mView.showUpdateDialog(versionName, version, dataBean)
                         }
                     }
                 }, { it.printStackTrace() })
     }
 
     override fun update(url: String) {
-        mView!!.initProgress()
+        mView.initProgress()
         val filePath = "$cacheDir/weather.apk"
         Flowable.create<Int>({
             var inputStream: InputStream? = null
@@ -110,20 +111,22 @@ constructor(private var mContext: App, private val mDataManager: DataManager, pr
             } catch (e: IOException) {
                 it.onError(e)
             } finally {
-                if (inputStream != null) {
-                    inputStream.close()
+                inputStream?.apply {
+                    close()
                 }
-                if (outputStream != null) {
-                    outputStream.close()
+                outputStream?.apply {
+                    close()
                 }
             }
             it.onComplete()
         }, BackpressureStrategy.BUFFER)
-                .compose(mView!!.bindToLifecycle())
+                .compose(mView.bindToLifecycle())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ integer -> mView!!.showDownloadProgress(integer!!) }, { it.printStackTrace() }) {
-                    mView!!.closeProgress()
+                .subscribe({ integer ->
+                    mView.showDownloadProgress(integer ?: 0)
+                }, { it.printStackTrace() }) {
+                    mView.closeProgress()
                     val intent = Intent(Intent.ACTION_VIEW)
                     val file = File(filePath)
                     val apkUri = FileProvider.getUriForFile(mContext, BuildConfig.APPLICATION_ID + ".fileProvider", file)
@@ -134,22 +137,19 @@ constructor(private var mContext: App, private val mDataManager: DataManager, pr
     }
 
     override fun getBingPic(day: String) {
-        mOkHttpHelper.get("http://guolin.tech/api/bing_pic", object : Callback {
-            override fun onFailure(call: Call, e: IOException) {
-                e.printStackTrace()
-                mView!!.setBingPic(null)
-            }
-
-            @Throws(IOException::class)
-            override fun onResponse(call: Call, response: Response) {
-                val url = response.body()!!.string()
-                if (!TextUtils.isEmpty(url)) {
-                    mDataManager.bingPicUrl = url
-                    mDataManager.bingPicTime = day
-                }
-                mView!!.setBingPic(url)
-            }
-        })
+        mOkHttpHelper.get("http://guolin.tech/api/bing_pic")
+                .bindToLifecycle()
+                .applySchedulers()
+                .subscribe({
+                    val url = it.body()!!.string()
+                    if (!TextUtils.isEmpty(url)) {
+                        mDataManager.bingPicUrl = url
+                        mDataManager.bingPicTime = day
+                    }
+                    mView.setBingPic(url)
+                }, {
+                    mView.showErrorMsg(it.message ?: "")
+                })
     }
 
     override fun findLocation() {
@@ -179,22 +179,22 @@ constructor(private var mContext: App, private val mDataManager: DataManager, pr
                 }
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe {
-                    mView!!.setProgressBar(View.VISIBLE)
-                    mView!!.setEmptyView(View.GONE)
+                    mView.setProgressBar(View.VISIBLE)
+                    mView.setEmptyView(View.GONE)
                 }
-                .doFinally { mView!!.setProgressBar(View.GONE) }
+                .doFinally { mView.setProgressBar(View.GONE) }
                 .subscribe({ searchBean ->
                     searchBean.HeWeather6?.let {
                         val heWeather6Bean = it[0]
                         if (heWeather6Bean.status == "ok" && !heWeather6Bean.basic!!.isEmpty()) {
                             CityListBean(cityName = heWeather6Bean.basic!![0].location!!, weatherId = Integer.valueOf(heWeather6Bean.basic!![0].cid!!.substring(2))).save()
-                            mView!!.initCities()
+                            mView.initCities()
                         }
                     }
                 }) { throwable ->
                     throwable.printStackTrace()
-                    mView!!.showErrorMsg(throwable.message!!)
-                    mView!!.setEmptyView(View.VISIBLE)
+                    mView.showErrorMsg(throwable.message!!)
+                    mView.setEmptyView(View.VISIBLE)
                 }
     }
 
@@ -205,7 +205,7 @@ constructor(private var mContext: App, private val mDataManager: DataManager, pr
     override fun loadBingPic(url: String) {
         Glide.with(mContext).load(url).into(object : SimpleTarget<Drawable>() {
             override fun onResourceReady(resource: Drawable, transition: Transition<in Drawable>?) {
-                mView!!.setBackground(resource)
+                mView.setBackground(resource)
             }
         })
     }

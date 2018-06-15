@@ -5,7 +5,7 @@ import android.widget.TextView
 import butterknife.BindView
 import com.xily.kotlinweather.R
 import com.xily.kotlinweather.base.BaseAdapter
-import com.xily.kotlinweather.model.bean.WeatherBean
+import com.xily.kotlinweather.model.network.bean.WeatherBean
 
 class AlarmAdapter(mList: List<WeatherBean.ValueBean.AlarmsBean>) : BaseAdapter<AlarmAdapter.ViewHolder, WeatherBean.ValueBean.AlarmsBean>(mList) {
 

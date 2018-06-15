@@ -1,6 +1,6 @@
 package com.xily.kotlinweather.model.db
 
-import com.xily.kotlinweather.model.bean.*
+import com.xily.kotlinweather.model.db.bean.*
 import org.litepal.LitePal
 import javax.inject.Inject
 

@@ -9,7 +9,7 @@ import butterknife.BindView
 import com.xily.kotlinweather.R
 import com.xily.kotlinweather.base.RxBaseActivity
 import com.xily.kotlinweather.contract.AlarmContract
-import com.xily.kotlinweather.model.bean.WeatherBean
+import com.xily.kotlinweather.model.network.bean.WeatherBean
 import com.xily.kotlinweather.presenter.AlarmPresenter
 import com.xily.kotlinweather.ui.adapter.AlarmAdapter
 import com.xily.kotlinweather.utils.debug
@@ -27,7 +27,7 @@ class AlarmActivity : RxBaseActivity<AlarmPresenter>(), AlarmContract.View {
         initToolBar()
         val intent = intent
         val id = intent.getIntExtra("alarmId", -1)
-        debug("id", "" + id)
+        debug("id", id)
         if (id >= 0) {
             mPresenter.getAlarms(id)
         }
@@ -37,9 +37,9 @@ class AlarmActivity : RxBaseActivity<AlarmPresenter>(), AlarmContract.View {
         setSupportActionBar(mToolbar)
         title = "预警信息"
         val actionBar = supportActionBar
-        if (actionBar != null) {
-            actionBar.setHomeButtonEnabled(true)
-            actionBar.setDisplayHomeAsUpEnabled(true)
+        actionBar?.apply {
+            setHomeButtonEnabled(true)
+            setDisplayHomeAsUpEnabled(true)
         }
     }
 

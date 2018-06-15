@@ -33,9 +33,9 @@ class AboutActivity : RxBaseActivity<AboutPresenter>(), AboutContract.View {
         setSupportActionBar(mToolbar)
         title = "关于"
         val actionBar = supportActionBar
-        if (actionBar != null) {
-            actionBar.setHomeButtonEnabled(true)
-            actionBar.setDisplayHomeAsUpEnabled(true)
+        actionBar?.apply {
+            setHomeButtonEnabled(true)
+            setDisplayHomeAsUpEnabled(true)
         }
     }
 

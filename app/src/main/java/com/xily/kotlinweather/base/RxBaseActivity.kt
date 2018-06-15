@@ -16,7 +16,7 @@ import javax.inject.Inject
 abstract class RxBaseActivity<T: IBasePresenter> : RxAppCompatActivity(), IBaseView {
     @Inject
     internal lateinit var mPresenter: T
-    private var bind: Unbinder? = null
+    private lateinit var bind: Unbinder
     /**
      * 设置布局layout
      *
@@ -59,20 +59,10 @@ abstract class RxBaseActivity<T: IBasePresenter> : RxAppCompatActivity(), IBaseV
 
     }
 
-    /**
-     * 加载数据
-     */
-    open fun loadData() {}
-
-    /**
-     * 设置数据显示
-     */
-    open fun finishTask() {}
-
     override fun onDestroy() {
         mPresenter.detachView()
         super.onDestroy()
-        bind!!.unbind()
+        bind.unbind()
     }
 
     abstract fun initInject()

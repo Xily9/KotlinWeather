@@ -6,7 +6,7 @@ import android.widget.TextView
 import butterknife.BindView
 import com.xily.kotlinweather.R
 import com.xily.kotlinweather.base.BaseAdapter
-import com.xily.kotlinweather.model.bean.WeatherBean
+import com.xily.kotlinweather.model.network.bean.WeatherBean
 import com.xily.kotlinweather.utils.WeatherUtil
 import com.xily.kotlinweather.utils.debug
 

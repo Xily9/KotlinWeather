@@ -3,7 +3,7 @@ package com.xily.kotlinweather.presenter
 import com.xily.kotlinweather.base.BasePresenter
 import com.xily.kotlinweather.contract.CityContract
 import com.xily.kotlinweather.model.DataManager
-import com.xily.kotlinweather.model.bean.CityListBean
+import com.xily.kotlinweather.model.db.bean.CityListBean
 
 import javax.inject.Inject
 

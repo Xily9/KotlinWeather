@@ -2,7 +2,7 @@ package com.xily.kotlinweather.contract
 
 import com.xily.kotlinweather.base.IBasePresenter
 import com.xily.kotlinweather.base.IBaseView
-import com.xily.kotlinweather.model.bean.WeatherBean
+import com.xily.kotlinweather.model.network.bean.WeatherBean
 
 interface PagerContract {
     interface View : IBaseView {

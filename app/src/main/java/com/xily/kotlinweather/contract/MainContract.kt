@@ -4,8 +4,8 @@ import android.graphics.drawable.Drawable
 
 import com.xily.kotlinweather.base.IBasePresenter
 import com.xily.kotlinweather.base.IBaseView
-import com.xily.kotlinweather.model.bean.CityListBean
-import com.xily.kotlinweather.model.bean.VersionBean
+import com.xily.kotlinweather.model.db.bean.CityListBean
+import com.xily.kotlinweather.model.network.bean.VersionBean
 
 interface MainContract {
     interface View : IBaseView {

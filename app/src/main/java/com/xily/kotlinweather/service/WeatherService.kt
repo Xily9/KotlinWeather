@@ -14,9 +14,9 @@ import com.xily.kotlinweather.R
 import com.xily.kotlinweather.app.App
 import com.xily.kotlinweather.di.component.DaggerServiceComponent
 import com.xily.kotlinweather.model.DataManager
-import com.xily.kotlinweather.model.bean.AlarmsBean
-import com.xily.kotlinweather.model.bean.CityListBean
-import com.xily.kotlinweather.model.bean.WeatherBean
+import com.xily.kotlinweather.model.db.bean.AlarmsBean
+import com.xily.kotlinweather.model.db.bean.CityListBean
+import com.xily.kotlinweather.model.network.bean.WeatherBean
 import com.xily.kotlinweather.ui.activity.AlarmActivity
 import com.xily.kotlinweather.ui.activity.MainActivity
 import com.xily.kotlinweather.utils.WeatherUtil

@@ -20,10 +20,10 @@ import com.xily.kotlinweather.R
 import com.xily.kotlinweather.base.RxBaseActivity
 import com.xily.kotlinweather.contract.CityContract
 import com.xily.kotlinweather.model.bean.BusBean
-import com.xily.kotlinweather.model.bean.CityListBean
+import com.xily.kotlinweather.model.db.bean.CityListBean
 import com.xily.kotlinweather.presenter.CityPresenter
-import com.xily.kotlinweather.rx.RxBus
 import com.xily.kotlinweather.ui.adapter.CityAdapter
+import com.xily.kotlinweather.utils.RxBus
 import java.util.*
 
 class CityActivity : RxBaseActivity<CityPresenter>(), CityContract.View {
@@ -36,7 +36,7 @@ class CityActivity : RxBaseActivity<CityPresenter>(), CityContract.View {
     @BindView(R.id.view)
     internal lateinit var coordinatorLayout: CoordinatorLayout
     private val cityList = ArrayList<CityListBean>()
-    private var adapter: CityAdapter? = null
+    private lateinit var adapter: CityAdapter
 
     override val layoutId: Int
         get() = R.layout.activity_city
@@ -65,14 +65,14 @@ class CityActivity : RxBaseActivity<CityPresenter>(), CityContract.View {
                         .setAction("撤销") {
                             val newCity = mPresenter.addCity(city)
                             cityList.add(position, newCity)
-                            adapter!!.notifyItemInserted(position)
-                            adapter!!.notifyItemRangeChanged(position, cityList.size)
+                            adapter.notifyItemInserted(position)
+                            adapter.notifyItemRangeChanged(position, cityList.size)
                         }.show()
                 val busBean = BusBean()
                 busBean.status = 1
                 RxBus.instance.post(busBean)
                 cityList.removeAt(position)
-                adapter!!.notifyItemRemoved(position)
+                adapter.notifyItemRemoved(position)
                 val cityId = mPresenter.notificationId
                 if (id == cityId) {
                     if (cityList.isEmpty()) {
@@ -105,7 +105,7 @@ class CityActivity : RxBaseActivity<CityPresenter>(), CityContract.View {
 
         })
         itemTouchHelper.attachToRecyclerView(mRecycleView)
-        adapter!!.setOnItemClickListener { position ->
+        adapter.setOnItemClickListener { position ->
             val busBean = BusBean()
             busBean.status = 2
             busBean.position = position
@@ -114,18 +114,18 @@ class CityActivity : RxBaseActivity<CityPresenter>(), CityContract.View {
         }
     }
 
-    override fun loadData() {
+    private fun loadData() {
         cityList.clear()
         cityList.addAll(mPresenter.cityList)
         finishTask()
     }
 
-    override fun finishTask() {
+    private fun finishTask() {
         if (cityList.isEmpty()) {
             empty.visibility = View.VISIBLE
         } else {
             empty.visibility = View.GONE
-            adapter!!.notifyDataSetChanged()
+            adapter.notifyDataSetChanged()
         }
     }
 

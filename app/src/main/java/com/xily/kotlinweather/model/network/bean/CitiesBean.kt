@@ -1,6 +1,6 @@
-package com.xily.kotlinweather.model.bean
+package com.xily.kotlinweather.model.network.bean
 
-class ProvincesBean {
+class CitiesBean {
 
     /**
      * id : 1

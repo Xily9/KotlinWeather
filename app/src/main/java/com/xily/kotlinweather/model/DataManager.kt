@@ -1,8 +1,9 @@
 package com.xily.kotlinweather.model
 
-import com.xily.kotlinweather.model.bean.*
 import com.xily.kotlinweather.model.db.DbHelper
+import com.xily.kotlinweather.model.db.bean.*
 import com.xily.kotlinweather.model.network.HttpHelper
+import com.xily.kotlinweather.model.network.bean.*
 import com.xily.kotlinweather.model.prefs.PreferencesHelper
 import io.reactivex.Observable
 

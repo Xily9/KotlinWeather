@@ -10,8 +10,8 @@ import android.widget.RemoteViews
 import com.google.gson.Gson
 import com.xily.kotlinweather.BuildConfig
 import com.xily.kotlinweather.R
-import com.xily.kotlinweather.model.bean.CityListBean
-import com.xily.kotlinweather.model.bean.WeatherBean
+import com.xily.kotlinweather.model.db.bean.CityListBean
+import com.xily.kotlinweather.model.network.bean.WeatherBean
 import com.xily.kotlinweather.service.WeatherService
 import com.xily.kotlinweather.ui.activity.MainActivity
 import com.xily.kotlinweather.utils.PreferenceUtil
