@@ -15,10 +15,7 @@ import com.xily.kotlinweather.base.RxBaseActivity
 import com.xily.kotlinweather.contract.AddCityContract
 import com.xily.kotlinweather.model.bean.BusBean
 import com.xily.kotlinweather.presenter.AddCityPresenter
-import com.xily.kotlinweather.utils.RxBus
-import com.xily.kotlinweather.utils.hideSoftInput
-import com.xily.kotlinweather.utils.showMessage
-import com.xily.kotlinweather.utils.toast
+import com.xily.kotlinweather.utils.*
 import java.util.*
 
 class AddCityActivity : RxBaseActivity<AddCityPresenter>(), AddCityContract.View {
@@ -32,9 +29,7 @@ class AddCityActivity : RxBaseActivity<AddCityPresenter>(), AddCityContract.View
     private val mDataList = ArrayList<String>()
     private val mCodeList = ArrayList<Int>()
     private var level = 0
-    private var provinceId: Int = 0
     private var provinceName: String? = null
-    private var cityId: Int = 0
     private var cityName: String? = null
     private var weatherId: Int = 0
     private var countyName: String? = null
@@ -71,11 +66,9 @@ class AddCityActivity : RxBaseActivity<AddCityPresenter>(), AddCityContract.View
                     showMessage(window.decorView, "该城市已经被添加过!")
                 }
             } else if (level == 1) {
-                provinceId = mCodeList[i]
                 provinceName = mDataList[i]
                 loadData()
             } else if (level == 2) {
-                cityId = mCodeList[i]
                 cityName = mDataList[i]
                 loadData()
             }
@@ -93,6 +86,7 @@ class AddCityActivity : RxBaseActivity<AddCityPresenter>(), AddCityContract.View
     }
 
     fun loadData() {
+        debug(msg = level)
         when (level) {
             0 -> {
                 title.text = "中国"
@@ -100,11 +94,11 @@ class AddCityActivity : RxBaseActivity<AddCityPresenter>(), AddCityContract.View
             }
             1 -> {
                 title.text = provinceName
-                mPresenter.queryCities(provinceId)
+                mPresenter.queryCities(provinceName ?: "")
             }
             2 -> {
                 title.text = cityName
-                mPresenter.queryCounties(provinceId, cityId)
+                mPresenter.queryCounties(provinceName ?: "", cityName ?: "")
             }
             else -> {
             }
@@ -164,12 +158,14 @@ class AddCityActivity : RxBaseActivity<AddCityPresenter>(), AddCityContract.View
         progressDialog?.dismiss()
     }
 
-    override fun show(dataList: List<String>, codeList: List<Int>) {
-        level++
+    override fun show(dataList: List<String>, codeList: List<Int>?) {
+        if (!isSearch) level++
         mDataList.clear()
         mDataList.addAll(dataList)
-        mCodeList.clear()
-        mCodeList.addAll(codeList)
+        codeList?.let {
+            mCodeList.clear()
+            mCodeList.addAll(it)
+        }
         adapter.notifyDataSetChanged()
     }
 

@@ -29,6 +29,7 @@ import io.reactivex.schedulers.Schedulers
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.io.*
+import java.lang.Exception
 import javax.inject.Inject
 
 class MainPresenter @Inject
@@ -171,25 +172,26 @@ constructor(private var mContext: App, private val mDataManager: DataManager, pr
                         }
                     })
         })
-                .flatMap { location ->
-                    mDataManager
-                            .search(location.district.substring(0, location.district.length - 1))
-                            .bindToLifecycle()
-                            .subscribeOn(Schedulers.io())
+                .map { location ->
+                    var list = mDataManager.search(location.district.substring(0, location.district.length - 1))
+                    if (list.isEmpty()) {
+                        list = mDataManager.search(location.city.substring(0, location.city.length - 1))
+                    }
+                    list
                 }
-                .observeOn(AndroidSchedulers.mainThread())
+                .applySchedulers()
                 .doOnSubscribe {
                     mView.setProgressBar(View.VISIBLE)
                     mView.setEmptyView(View.GONE)
                 }
                 .doFinally { mView.setProgressBar(View.GONE) }
-                .subscribe({ searchBean ->
-                    searchBean.HeWeather6?.let {
-                        val heWeather6Bean = it[0]
-                        if (heWeather6Bean.status == "ok" && !heWeather6Bean.basic!!.isEmpty()) {
-                            CityListBean(cityName = heWeather6Bean.basic!![0].location!!, weatherId = Integer.valueOf(heWeather6Bean.basic!![0].cid!!.substring(2))).save()
-                            mView.initCities()
-                        }
+                .subscribe({ locationBean ->
+                    if (locationBean.isNotEmpty()) {
+                        val data = locationBean[0]
+                        CityListBean(cityName = data.areaName, weatherId = data.weatherId).save()
+                        mView.initCities()
+                    } else {
+                        throw Exception("没有找到您所在城市的信息!")
                     }
                 }) { throwable ->
                     throwable.printStackTrace()

@@ -1,14 +1,35 @@
 package com.xily.kotlinweather.model
 
 import com.xily.kotlinweather.model.db.DbHelper
-import com.xily.kotlinweather.model.db.bean.*
+import com.xily.kotlinweather.model.db.ISQLiteHelper
+import com.xily.kotlinweather.model.db.bean.AlarmsBean
+import com.xily.kotlinweather.model.db.bean.CityListBean
+import com.xily.kotlinweather.model.db.bean.LocationBean
 import com.xily.kotlinweather.model.network.HttpHelper
-import com.xily.kotlinweather.model.network.bean.*
+import com.xily.kotlinweather.model.network.bean.VersionBean
+import com.xily.kotlinweather.model.network.bean.WeatherBean
 import com.xily.kotlinweather.model.prefs.PreferencesHelper
 import io.reactivex.Observable
 
 
-class DataManager(private val mPreferenceHelper: PreferencesHelper, private val mHttpHelper: HttpHelper, private val mDbHelper: DbHelper) : HttpHelper, PreferencesHelper, DbHelper {
+class DataManager
+(private val mPreferenceHelper: PreferencesHelper, private val mHttpHelper: HttpHelper, private val mDbHelper: DbHelper, private val mSQLiteHelper: ISQLiteHelper)
+    : HttpHelper, PreferencesHelper, DbHelper, ISQLiteHelper {
+    override fun getProvinces(): List<LocationBean> {
+        return mSQLiteHelper.getProvinces()
+    }
+
+    override fun search(location: String): List<LocationBean> {
+        return mSQLiteHelper.search(location)
+    }
+
+    override fun getCities(province: String): List<LocationBean> {
+        return mSQLiteHelper.getCities(province)
+    }
+
+    override fun getCounties(province: String, city: String): List<LocationBean> {
+        return mSQLiteHelper.getCounties(province, city)
+    }
 
     override var checkedVersion: Int
         get() = mPreferenceHelper.checkedVersion
@@ -109,23 +130,12 @@ class DataManager(private val mPreferenceHelper: PreferencesHelper, private val 
     override val cityList: List<CityListBean>
         get() = mDbHelper.cityList
 
-    override val province: List<ProvinceBean>
-        get() = mDbHelper.province
-
-    override fun getProvinces(): Observable<List<ProvincesBean>> {
-        return mHttpHelper.getProvinces()
-    }
-
     override fun getCityById(id: Int): CityListBean? {
         return mDbHelper.getCityById(id)
     }
 
     override fun getCityByWeatherId(id: Int): List<CityListBean> {
         return mDbHelper.getCityByWeatherId(id)
-    }
-
-    override fun getCity(provinceId: String): List<CityBean> {
-        return mDbHelper.getCity(provinceId)
     }
 
     override fun checkVersion(): Observable<VersionBean> {
@@ -136,18 +146,6 @@ class DataManager(private val mPreferenceHelper: PreferencesHelper, private val 
         return mHttpHelper.getWeather(cityId)
     }
 
-    override fun search(location: String): Observable<SearchBean> {
-        return mHttpHelper.search(location)
-    }
-
-    override fun getCities(province: String): Observable<List<CitiesBean>> {
-        return mHttpHelper.getCities(province)
-    }
-
-    override fun getCounty(cityId: String): List<CountyBean> {
-        return mDbHelper.getCounty(cityId)
-    }
-
     override fun deleteCity(id: Int) {
         mDbHelper.deleteCity(id)
     }
@@ -156,7 +154,4 @@ class DataManager(private val mPreferenceHelper: PreferencesHelper, private val 
         return mDbHelper.getAlarmsById(id)
     }
 
-    override fun getCounties(province: String, city: String): Observable<List<CountiesBean>> {
-        return mHttpHelper.getCounties(province, city)
-    }
 }

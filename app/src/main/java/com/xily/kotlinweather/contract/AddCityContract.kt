@@ -10,7 +10,7 @@ interface AddCityContract {
 
         fun closeProgressDialog()
 
-        fun show(dataList: List<String>, codeList: List<Int>)
+        fun show(dataList: List<String>, codeList: List<Int>?)
     }
 
     interface Presenter : IBasePresenter {
@@ -20,9 +20,9 @@ interface AddCityContract {
 
         fun queryProvinces()
 
-        fun queryCities(provinceId: Int)
+        fun queryCities(provinceName: String)
 
-        fun queryCounties(provinceId: Int, cityId: Int)
+        fun queryCounties(provinceName: String, cityName: String)
 
         fun addCity(WeatherId: Int, countyName: String)
     }
