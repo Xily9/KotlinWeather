@@ -73,16 +73,12 @@ class MainActivity : RxBaseActivity<MainPresenter>(), NavigationView.OnNavigatio
     override val layoutId: Int
         get() = R.layout.activity_main
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        setStatusBarUpper()
-        super.onCreate(savedInstanceState)
-    }
-
     override fun initInject() {
         activityComponent.inject(this)
     }
 
     override fun initViews(savedInstanceState: Bundle?) {
+        setStatusBarUpper()
         loadBackgroundImage()
         initToolBar()
         initNavigationView()

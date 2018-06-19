@@ -51,8 +51,8 @@ class WeatherService : Service() {
     }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
-        val isAutoUpdate = mDataManager!!.autoUpdate
-        val notification = mDataManager!!.notification
+        val isAutoUpdate = mDataManager.autoUpdate
+        val notification = mDataManager.notification
         if (notification) {
             startNotification(false)
         }
@@ -133,12 +133,12 @@ class WeatherService : Service() {
     private fun runTask() {
         val calendar = Calendar.getInstance()
         val hour = calendar.get(Calendar.HOUR_OF_DAY)
-        val nightNoUpdate = mDataManager!!.nightNoUpdate
+        val nightNoUpdate = mDataManager.nightNoUpdate
         if (nightNoUpdate && hour < 23 && hour >= 6 || !nightNoUpdate) {
-            val cityList = mDataManager!!.cityList
+            val cityList = mDataManager.cityList
             Observable.fromIterable(cityList)
                     .flatMap { cityList1 ->
-                        mDataManager!!
+                        mDataManager
                                 .getWeather(cityList1.weatherId.toString())
                                 .subscribeOn(Schedulers.io())
                                 .doOnNext { weatherInfo ->
@@ -148,9 +148,9 @@ class WeatherService : Service() {
                                     cityListUpdate.put("updateTime", System.currentTimeMillis())
                                     cityListUpdate.put("updateTimeStr", valueBean.realtime!!.time!!.substring(11, 16))
                                     LitePal.update(CityListBean::class.java, cityListUpdate, cityList1.id.toLong())
-                                    if (mDataManager!!.alarm) {
+                                    if (mDataManager.alarm) {
                                         for (alarmsBean in valueBean.alarms!!) {
-                                            val alarms = mDataManager!!.getAlarmsById(alarmsBean.alarmId!!)
+                                            val alarms = mDataManager.getAlarmsById(alarmsBean.alarmId!!)
                                             if (alarms.isEmpty()) {
                                                 notificationManager.notify(id++, getNotification(cityList1.cityName + " " + alarmsBean.alarmTypeDesc + "预警", alarmsBean.alarmContent, cityList1.id))
                                                 val alarmsBean1 = AlarmsBean(alarmsBean.alarmId!!)
@@ -158,17 +158,17 @@ class WeatherService : Service() {
                                             }
                                         }
                                     }
-                                    if (mDataManager!!.rain) {
+                                    if (mDataManager.rain) {
                                         val day = calendar.get(Calendar.YEAR).toString() + calendar.get(Calendar.MONTH) + calendar.get(Calendar.DAY_OF_MONTH)
-                                        val rainNotificationTime = mDataManager!!.rainNotificationTime
+                                        val rainNotificationTime = mDataManager.rainNotificationTime
                                         if (hour > 6 && rainNotificationTime != day) {
-                                            mDataManager!!.rainNotificationTime = day
+                                            mDataManager.rainNotificationTime = day
                                             if (valueBean.weathers!![0].weather!!.contains("雨")) {
-                                                notificationManager.notify(id++, getNotification(cityList1.cityName!! + "今天有雨", "今天天气为" + valueBean.weathers!![0].weather + ",出门记得带伞!"))
+                                                notificationManager.notify(id++, getNotification(cityList1.cityName + "今天有雨", "今天天气为" + valueBean.weathers!![0].weather + ",出门记得带伞!"))
                                             }
                                         }
                                     }
-                                    val notification = mDataManager!!.notification
+                                    val notification = mDataManager.notification
                                     if (notification) {
                                         startNotification(true)
                                     }
@@ -207,8 +207,8 @@ class WeatherService : Service() {
     internal inner class MyBroadcastReceiver : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
 
-            val isAutoUpdate = mDataManager!!.autoUpdate
-            val notification = mDataManager!!.notification
+            val isAutoUpdate = mDataManager.autoUpdate
+            val notification = mDataManager.notification
             if (notification) {
                 if (!isForeground)
                     startNotification(false)

@@ -67,6 +67,9 @@ class CityActivity : RxBaseActivity<CityPresenter>(), CityContract.View {
                             cityList.add(position, newCity)
                             adapter.notifyItemInserted(position)
                             adapter.notifyItemRangeChanged(position, cityList.size)
+                            val busBean = BusBean()
+                            busBean.status = 1
+                            RxBus.instance.post(busBean)
                         }.show()
                 val busBean = BusBean()
                 busBean.status = 1

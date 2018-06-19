@@ -67,7 +67,7 @@ class Weather3View : View {
             if (temp > max) max = temp
             if (temp < min) min = temp
         }
-        val h1 = 70 / (max - min)
+        val h1 = if (max == min) 70 else 70 / (max - min)
         val h2 = 100
         path.moveTo(dp2px(x.toFloat()).toFloat(), dp2px((h1 * (max - Integer.valueOf(weather3HoursDetailsInfosBeans[0].highestTemperature)) + mPaddingTop + 10).toFloat()).toFloat())
         for (i in weather3HoursDetailsInfosBeans.indices) {
