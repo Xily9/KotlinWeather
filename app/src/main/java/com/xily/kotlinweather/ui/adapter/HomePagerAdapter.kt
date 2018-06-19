@@ -3,6 +3,7 @@ package com.xily.kotlinweather.ui.adapter
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
+import android.support.v4.view.PagerAdapter
 import com.xily.kotlinweather.model.db.bean.CityListBean
 import com.xily.kotlinweather.ui.fragment.HomePagerFragment
 
@@ -14,5 +15,9 @@ class HomePagerAdapter(fm: FragmentManager, private val cityList: List<CityListB
 
     override fun getCount(): Int {
         return cityList?.size ?: 0
+    }
+
+    override fun getItemPosition(`object`: Any): Int {
+        return PagerAdapter.POSITION_NONE
     }
 }

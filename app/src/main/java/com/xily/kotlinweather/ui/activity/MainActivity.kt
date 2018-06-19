@@ -44,6 +44,7 @@ import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import java.util.*
 import java.util.concurrent.TimeUnit
+import kotlin.collections.ArrayList
 
 class MainActivity : RxBaseActivity<MainPresenter>(), NavigationView.OnNavigationItemSelectedListener, MainContract.View {
     @BindView(R.id.drawer_layout)
@@ -60,11 +61,15 @@ class MainActivity : RxBaseActivity<MainPresenter>(), NavigationView.OnNavigatio
     internal lateinit var empty: LinearLayout
     @BindView(R.id.progress)
     internal lateinit var progressBar: ProgressBar
+    @BindView(R.id.toolbar_title)
+    internal lateinit var toolbarTitle: TextView
+    @BindView(R.id.updateTime)
+    internal lateinit var updateTime: TextView
     private var exitTime: Long = 0
     private var mCompositeDisposable: CompositeDisposable = CompositeDisposable()
-    private var cityList: List<CityListBean>? = null
+    private var cityList = ArrayList<CityListBean>()
     private lateinit var progressDialog: ProgressDialog
-
+    private lateinit var adapter: HomePagerAdapter
     override val layoutId: Int
         get() = R.layout.activity_main
 
@@ -81,6 +86,7 @@ class MainActivity : RxBaseActivity<MainPresenter>(), NavigationView.OnNavigatio
         loadBackgroundImage()
         initToolBar()
         initNavigationView()
+        initViewPager()
         initRxBus()
         initCities()
         if (mPresenter.checkUpdate)
@@ -150,10 +156,11 @@ class MainActivity : RxBaseActivity<MainPresenter>(), NavigationView.OnNavigatio
                 .compose(bindToLifecycle())
                 .applySchedulers()
                 .subscribe({ busBean ->
-                    if (busBean.status == 1)
-                        recreate()
-                    else if (busBean.status == 2)
-                        viewPager.currentItem = busBean.position
+                    when (busBean.status) {
+                        1 -> initCities()
+                        2 -> viewPager.currentItem = busBean.position
+                        3 -> recreate()
+                    }
                 })
     }
 
@@ -166,7 +173,7 @@ class MainActivity : RxBaseActivity<MainPresenter>(), NavigationView.OnNavigatio
     private fun setPos(pos: Int) {
         liDot.removeAllViews()
         debug("tag", pos.toString())
-        for (i in cityList!!.indices) {
+        for (i in cityList.indices) {
             val textView = TextView(this)
             val layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
             layoutParams.leftMargin = dp2px(1f)
@@ -194,14 +201,17 @@ class MainActivity : RxBaseActivity<MainPresenter>(), NavigationView.OnNavigatio
     }
 
     override fun initCities() {
-        cityList = mPresenter.cityList
-        if (cityList?.isEmpty() == false) {
-            initViewPager()
+        cityList.clear()
+        cityList.addAll(mPresenter.cityList)
+        adapter.notifyDataSetChanged()
+        if (!cityList.isEmpty()) {
             setPos(0)
             activeTimer()
             startService()
         } else {
             empty.visibility = View.VISIBLE
+            updateTime.text = ""
+            toolbarTitle.text = ""
         }
     }
 
@@ -258,7 +268,8 @@ class MainActivity : RxBaseActivity<MainPresenter>(), NavigationView.OnNavigatio
     }
 
     private fun initViewPager() {
-        viewPager.adapter = HomePagerAdapter(supportFragmentManager, cityList)
+        adapter = HomePagerAdapter(supportFragmentManager, cityList)
+        viewPager.adapter = adapter
         viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
 

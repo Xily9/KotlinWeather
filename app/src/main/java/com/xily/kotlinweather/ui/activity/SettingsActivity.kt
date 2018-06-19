@@ -52,8 +52,8 @@ class SettingsActivity : RxBaseActivity<SettingsPresenter>(), SettingsContract.V
     internal lateinit var st5: Switch
     @BindView(R.id.st_10)
     internal lateinit var st10: Switch
-    private var localBroadcastManager: LocalBroadcastManager? = null
-    private var cityLists: List<CityListBean>? = null
+    private lateinit var localBroadcastManager: LocalBroadcastManager
+    private lateinit var cityLists: List<CityListBean>
 
     override val layoutId: Int
         get() = R.layout.activity_settings
@@ -68,7 +68,7 @@ class SettingsActivity : RxBaseActivity<SettingsPresenter>(), SettingsContract.V
     private fun initItem() {
         st1.isChecked = mPresenter.notification
         val cityId = mPresenter.notificationId
-        for (cityList in cityLists!!) {
+        for (cityList in cityLists) {
             if (cityList.id == cityId) {
                 cityName.text = cityList.cityName
                 break
@@ -84,15 +84,15 @@ class SettingsActivity : RxBaseActivity<SettingsPresenter>(), SettingsContract.V
         setSupportActionBar(mToolbar)
         title = "设置"
         val actionBar = supportActionBar
-        if (actionBar != null) {
-            actionBar.setHomeButtonEnabled(true)
-            actionBar.setDisplayHomeAsUpEnabled(true)
+        actionBar?.apply {
+            setHomeButtonEnabled(true)
+            setDisplayHomeAsUpEnabled(true)
         }
     }
 
     private fun sendLocalBroadcast() {
         val intent = Intent(BuildConfig.APPLICATION_ID + ".LOCAL_BROADCAST")
-        localBroadcastManager!!.sendBroadcast(intent)
+        localBroadcastManager.sendBroadcast(intent)
     }
 
     @OnCheckedChanged(R.id.st_1)
@@ -104,16 +104,16 @@ class SettingsActivity : RxBaseActivity<SettingsPresenter>(), SettingsContract.V
             }
             val cityId = mPresenter.notificationId
             var check = false
-            for (cityList in cityLists!!) {
+            for (cityList in cityLists) {
                 if (cityList.id == cityId) {
                     check = true
                     cityName.text = cityList.cityName
                     break
                 }
             }
-            if (!check && !cityLists!!.isEmpty()) {
-                mPresenter.notificationId = cityLists!![0].id
-                cityName.text = cityLists!![0].cityName
+            if (!check && !cityLists.isEmpty()) {
+                mPresenter.notificationId = cityLists[0].id
+                cityName.text = cityLists[0].cityName
             }
         }
         if (isServiceRunning(BuildConfig.APPLICATION_ID + ".service.WeatherService")) {
@@ -128,16 +128,13 @@ class SettingsActivity : RxBaseActivity<SettingsPresenter>(), SettingsContract.V
 
     @OnClick(R.id.st_2)
     internal fun selectCity() {
-        if (!cityLists!!.isEmpty()) {
-            val str = arrayOfNulls<String>(cityLists!!.size)
-            for (i in cityLists!!.indices) {
-                str[i] = cityLists!![i].cityName
-            }
+        if (!cityLists.isEmpty()) {
+            val str = Array(cityLists.size, { i -> cityLists[i].cityName })
             AlertDialog.Builder(this)
                     .setTitle("城市选择")
                     .setItems(str) { _, which ->
-                        mPresenter.notificationId = cityLists!![which].id
-                        cityName.text = cityLists!![which].cityName
+                        mPresenter.notificationId = cityLists[which].id
+                        cityName.text = cityLists[which].cityName
                         sendLocalBroadcast()
                     }.show()
         }
@@ -181,7 +178,7 @@ class SettingsActivity : RxBaseActivity<SettingsPresenter>(), SettingsContract.V
                     } else {
                         mPresenter.bgMode = which
                         val busBean = BusBean()
-                        busBean.status = 1
+                        busBean.status = 3
                         RxBus.instance.post(busBean)
                     }
                     dialog.dismiss()
@@ -200,7 +197,7 @@ class SettingsActivity : RxBaseActivity<SettingsPresenter>(), SettingsContract.V
                     } else {
                         mPresenter.navMode = which
                         val busBean = BusBean()
-                        busBean.status = 1
+                        busBean.status = 3
                         RxBus.instance.post(busBean)
                     }
                     dialog.dismiss()
@@ -221,8 +218,8 @@ class SettingsActivity : RxBaseActivity<SettingsPresenter>(), SettingsContract.V
                 android.app.AlertDialog.Builder(this)
                         .setTitle("权限申请")
                         .setMessage("为了能够自定义图片,需要申请以下权限:\n" + "文件存取:用于读取自定义图片信息")
-                        .setPositiveButton("立刻授权") { a, b -> ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), requestCode) }
-                        .setNegativeButton("取消") { a, b -> toast("您已取消权限申请,不能自定义图片") }
+                        .setPositiveButton("立刻授权") { _, _ -> ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), requestCode) }
+                        .setNegativeButton("取消") { _, _ -> toast("您已取消权限申请,不能自定义图片") }
                         .setCancelable(false)
                         .show()
             } else {
@@ -241,7 +238,7 @@ class SettingsActivity : RxBaseActivity<SettingsPresenter>(), SettingsContract.V
                 val selection = MediaStore.Images.Media._ID + "=" + id
                 imagePath = getImagePath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, selection)
             } else if ("com.android.providers.downloads.documents" == uri.authority) {
-                val contentUri = ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"), java.lang.Long.valueOf(docId))
+                val contentUri = ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"), docId.toLong())
                 imagePath = getImagePath(contentUri, null)
             }
         } else if ("content".equals(uri.scheme, ignoreCase = true)) {
@@ -249,11 +246,7 @@ class SettingsActivity : RxBaseActivity<SettingsPresenter>(), SettingsContract.V
         } else if ("file".equals(uri.scheme, ignoreCase = true)) {
             imagePath = uri.path
         }
-        return if (imagePath != null) {
-            imagePath
-        } else {
-            null
-        }
+        return imagePath
     }
 
     private fun openAlbum(requestCode: Int) {
@@ -289,7 +282,7 @@ class SettingsActivity : RxBaseActivity<SettingsPresenter>(), SettingsContract.V
                         mPresenter.setNavImgPath(imagePath!!)
                     }
                     val busBean = BusBean()
-                    busBean.status = 1
+                    busBean.status = 3
                     RxBus.instance.post(busBean)
                 }
             }
