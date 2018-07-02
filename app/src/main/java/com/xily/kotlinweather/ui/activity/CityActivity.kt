@@ -69,11 +69,11 @@ class CityActivity : RxBaseActivity<CityPresenter>(), CityContract.View {
                             adapter.notifyItemRangeChanged(position, cityList.size)
                             val busBean = BusBean()
                             busBean.status = 1
-                            RxBus.instance.post(busBean)
+                            RxBus.post(busBean)
                         }.show()
                 val busBean = BusBean()
                 busBean.status = 1
-                RxBus.instance.post(busBean)
+                RxBus.post(busBean)
                 cityList.removeAt(position)
                 adapter.notifyItemRemoved(position)
                 val cityId = mPresenter.notificationId
@@ -112,7 +112,7 @@ class CityActivity : RxBaseActivity<CityPresenter>(), CityContract.View {
             val busBean = BusBean()
             busBean.status = 2
             busBean.position = position
-            RxBus.instance.post(busBean)
+            RxBus.post(busBean)
             finish()
         }
     }

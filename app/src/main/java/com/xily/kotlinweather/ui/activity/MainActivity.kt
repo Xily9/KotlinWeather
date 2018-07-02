@@ -147,8 +147,7 @@ class MainActivity : RxBaseActivity<MainPresenter>(), NavigationView.OnNavigatio
     }
 
     private fun initRxBus() {
-        RxBus.instance
-                .toObservable(BusBean::class.java)
+        RxBus.toObservable(BusBean::class.java)
                 .compose(bindToLifecycle())
                 .applySchedulers()
                 .subscribe({ busBean ->

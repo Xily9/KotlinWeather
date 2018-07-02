@@ -179,7 +179,7 @@ class SettingsActivity : RxBaseActivity<SettingsPresenter>(), SettingsContract.V
                         mPresenter.bgMode = which
                         val busBean = BusBean()
                         busBean.status = 3
-                        RxBus.instance.post(busBean)
+                        RxBus.post(busBean)
                     }
                     dialog.dismiss()
                 }
@@ -198,7 +198,7 @@ class SettingsActivity : RxBaseActivity<SettingsPresenter>(), SettingsContract.V
                         mPresenter.navMode = which
                         val busBean = BusBean()
                         busBean.status = 3
-                        RxBus.instance.post(busBean)
+                        RxBus.post(busBean)
                     }
                     dialog.dismiss()
                 }
@@ -283,7 +283,7 @@ class SettingsActivity : RxBaseActivity<SettingsPresenter>(), SettingsContract.V
                     }
                     val busBean = BusBean()
                     busBean.status = 3
-                    RxBus.instance.post(busBean)
+                    RxBus.post(busBean)
                 }
             }
             else -> {

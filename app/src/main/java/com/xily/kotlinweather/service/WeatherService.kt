@@ -82,41 +82,43 @@ class WeatherService : Service() {
 
     private fun startNotification(isUpdate: Boolean) {
         val cityList = mDataManager.getCityById(mDataManager.notificationId)
-        val weatherBean = Gson().fromJson<WeatherBean>(cityList!!.weatherData, WeatherBean::class.java)
-        val intent1 = Intent(this, MainActivity::class.java)
-        val pendingIntent = PendingIntent.getActivity(this, 0, intent1, 0)
-        val builder = NotificationCompat.Builder(this, "weather")
-                .setWhen(System.currentTimeMillis())
-                .setContentIntent(pendingIntent)
-        val remoteViews = RemoteViews(packageName, R.layout.layout_notification)
-        remoteViews.setTextViewText(R.id.cityName, cityList.cityName)
-        if (weatherBean != null) {
-            val valueBean = weatherBean.value!![0]
-            remoteViews.setTextViewText(R.id.content, valueBean.realtime!!.weather + "   " + valueBean.pm25!!.aqi + " " + valueBean.pm25!!.quality + "   " + valueBean.realtime!!.wd + valueBean.realtime!!.ws)
-            if (map.containsKey(valueBean.realtime!!.img)) {
-                builder.setSmallIcon(map.get(valueBean.realtime!!.img)!!)
-                remoteViews.setImageViewResource(R.id.icon, map.get(valueBean.realtime!!.img)!!)
+        cityList?.let {
+            val weatherBean = Gson().fromJson<WeatherBean>(cityList.weatherData, WeatherBean::class.java)
+            val intent1 = Intent(this, MainActivity::class.java)
+            val pendingIntent = PendingIntent.getActivity(this, 0, intent1, 0)
+            val builder = NotificationCompat.Builder(this, "weather")
+                    .setWhen(System.currentTimeMillis())
+                    .setContentIntent(pendingIntent)
+            val remoteViews = RemoteViews(packageName, R.layout.layout_notification)
+            remoteViews.setTextViewText(R.id.cityName, cityList.cityName)
+            if (weatherBean != null) {
+                val valueBean = weatherBean.value!![0]
+                remoteViews.setTextViewText(R.id.content, valueBean.realtime!!.weather + "   " + valueBean.pm25!!.aqi + " " + valueBean.pm25!!.quality + "   " + valueBean.realtime!!.wd + valueBean.realtime!!.ws)
+                if (map.containsKey(valueBean.realtime!!.img)) {
+                    builder.setSmallIcon(map.get(valueBean.realtime!!.img)!!)
+                    remoteViews.setImageViewResource(R.id.icon, map.get(valueBean.realtime!!.img)!!)
+                } else {
+                    builder.setSmallIcon(R.drawable.weather_na)
+                    remoteViews.setImageViewResource(R.id.icon, R.drawable.weather_na)
+                    debug("unknown", valueBean.realtime!!.weather!! + valueBean.realtime!!.img!!)
+                }
+                remoteViews.setTextViewText(R.id.temperature, valueBean.realtime!!.temp!! + "°")
             } else {
+                builder.setContentText("N/A")
                 builder.setSmallIcon(R.drawable.weather_na)
                 remoteViews.setImageViewResource(R.id.icon, R.drawable.weather_na)
-                debug("unknown", valueBean.realtime!!.weather!! + valueBean.realtime!!.img!!)
-            }
-            remoteViews.setTextViewText(R.id.temperature, valueBean.realtime!!.temp!! + "°")
-        } else {
-            builder.setContentText("N/A")
-            builder.setSmallIcon(R.drawable.weather_na)
-            remoteViews.setImageViewResource(R.id.icon, R.drawable.weather_na)
-        }/*
+            }/*
             if (!TextUtils.isEmpty(cityList.getUpdateTimeStr())) {
                 remoteViews.setTextViewText(R.id.updateTime, "更新于 " + cityList.getUpdateTimeStr());
             }*/
-        builder.setCustomContentView(remoteViews)
-        val notification = builder.build()
-        if (isUpdate) {
-            notificationManager.notify(1, notification)
-        } else {
-            startForeground(1, notification)
-            isForeground = true
+            builder.setCustomContentView(remoteViews)
+            val notification = builder.build()
+            if (isUpdate) {
+                notificationManager.notify(1, notification)
+            } else {
+                startForeground(1, notification)
+                isForeground = true
+            }
         }
     }
 

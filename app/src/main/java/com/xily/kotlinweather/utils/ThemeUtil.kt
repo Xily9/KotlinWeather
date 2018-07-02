@@ -10,6 +10,7 @@ import android.widget.FrameLayout
 import android.widget.LinearLayout
 
 import com.xily.kotlinweather.R
+import com.xily.kotlinweather.app.App
 
 
 /**
@@ -32,17 +33,18 @@ object ThemeUtil {
     }
 
     fun showSwitchThemeDialog(activity: Activity) {
-        val linearLayout = LinearLayout(activity)
+        val context = App.instance.applicationContext
+        val linearLayout = LinearLayout(context)
         val padding = dp2px(20f)
         linearLayout.setPadding(padding, padding, padding, padding)
         linearLayout.gravity = Gravity.CENTER_HORIZONTAL
-        val frameLayout = FrameLayout(activity)
+        val frameLayout = FrameLayout(context)
         val colorList = ThemeUtil.colorList
         val theme = ThemeUtil.theme
         for (i in colorList.indices) {
-            val button = Button(activity)
+            val button = Button(context)
             val gradientDrawable = GradientDrawable()
-            gradientDrawable.setColor(activity.resources.getColor(colorList[i]))
+            gradientDrawable.setColor(context.resources.getColor(colorList[i]))
             gradientDrawable.shape = GradientDrawable.OVAL
             button.background = gradientDrawable
             val layoutParams = FrameLayout.LayoutParams(dp2px(40f), dp2px(40f))

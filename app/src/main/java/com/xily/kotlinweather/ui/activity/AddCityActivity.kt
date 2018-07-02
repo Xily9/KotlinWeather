@@ -59,7 +59,7 @@ class AddCityActivity : RxBaseActivity<AddCityPresenter>(), AddCityContract.View
                     toast("添加成功!")
                     val busBean = BusBean()
                     busBean.status = 1
-                    RxBus.instance.post(busBean)
+                    RxBus.post(busBean)
                     setResult(1)
                     finish()
                 } else {
