@@ -150,13 +150,13 @@ class MainActivity : RxBaseActivity<MainPresenter>(), NavigationView.OnNavigatio
         RxBus.toObservable(BusBean::class.java)
                 .compose(bindToLifecycle())
                 .applySchedulers()
-                .subscribe({ busBean ->
+                .subscribe { busBean ->
                     when (busBean.status) {
                         1 -> initCities()
                         2 -> viewPager.currentItem = busBean.position
                         3 -> recreate()
                     }
-                })
+                }
     }
 
     private fun startService() {
@@ -200,6 +200,7 @@ class MainActivity : RxBaseActivity<MainPresenter>(), NavigationView.OnNavigatio
         cityList.addAll(mPresenter.cityList)
         adapter.notifyDataSetChanged()
         if (!cityList.isEmpty()) {
+            empty.visibility = View.GONE
             setPos(0)
             activeTimer()
             startService()

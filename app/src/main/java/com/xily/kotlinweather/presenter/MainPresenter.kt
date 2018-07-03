@@ -154,7 +154,7 @@ constructor(private var mContext: App, private val mDataManager: DataManager, pr
     }
 
     override fun findLocation() {
-        Observable.create<AMapLocation>({
+        Observable.create<AMapLocation> {
             getLocation(
                     AMapLocationListener { location ->
                         if (location == null) {
@@ -171,7 +171,7 @@ constructor(private var mContext: App, private val mDataManager: DataManager, pr
                             }
                         }
                     })
-        })
+        }
                 .map { location ->
                     var list = mDataManager.search(location.district.substring(0, location.district.length - 1))
                     if (list.isEmpty()) {

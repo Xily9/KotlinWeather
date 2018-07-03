@@ -77,7 +77,7 @@ class WeatherService : Service() {
     private fun startTimer() {
         val i = Intent(this, WeatherService::class.java)
         pendingIntent = PendingIntent.getService(this, 0, i, 0)
-        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + 60 * 60 * 1000, pendingIntent)
+        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + 30 * 60 * 1000, pendingIntent)
     }
 
     private fun startNotification(isUpdate: Boolean) {
